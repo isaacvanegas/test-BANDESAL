@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<body>
+
+<ui:composition template="./../WEB-INF/templates/template.xhtml">
+
+    <ui:define name="content">
+
+        <p:messages id="mensaje" severity="info,fatal" showDetail="true"/>
+
+        <h:form id="listaReaderReaderForm">
+
+            <div class="ui-grid">
+                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                    <p:commandButton value="Agregar blog y reader" icon="pi pi-plus-circle" type="button" actionListener="#{readerController.clean()}"
+                                     onclick="PF('dlg2').show();"/>
+                </div>
+            </div>
+
+            <p:dataTable id="dtBlogReader"
+                         style="height: auto !important;"
+                         var="blogReader"
+                         widgetVar="dtBlogReader"
+                         value="#{blogReaderController.listBlogReader}"
+                         paginatorPosition="top"
+                         paginator="true"
+                         emptyMessage="sin registros"
+                         rows="10"
+                         lazy="true"
+                         pageLinks="5"
+                         dynamic="true"
+                         reflow="true"
+                         scrollable="false"
+                         scrollWidth="100%"
+                         scrollHeight="100%"
+                         expandedRow="false"
+                         styleClass="ui-paginator-current"
+                         rowKey="#{blogReader.id}"
+                         selectionMode="single"
+                         selection="#{blogReaderController.blogReader}">
+
+                <p:ajax event="rowSelect"/>
+
+                <p:column headerText="Id" width="5%">
+                    <h:outputText value="#{blogReader.id}"/>
+                </p:column>
+                <p:column headerText="Blog" width="25%">
+                    <h:outputText value="#{blogReader.blogs.title}"/>
+                </p:column>
+                <p:column headerText="Reader" width="25%">
+                    <h:outputText value="#{blogReader.readers.name}"/>
+                </p:column>
+
+            </p:dataTable>
+
+        </h:form>
+
+        <p:dialog header="#{blogReaderController.getAction()} + Blog" id="dlg2"
+                  widgetVar="dlg2" modal="true" width="100%"
+                  position="top">
+
+            <h:form id="formBlogReader">
+
+                <div class="ui-g">
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-6 ui-lg-3">
+                            <p:commandButton value="#{blogReaderController.getAction()}" actionListener="#{blogReaderController.registrar()}" update="listaBlogForm , mensaje"/>
+                            <p:commandButton value="Eliminar" actionListener="#{blogReaderController.eliminar()}" update="listaBlogReaderForm , mensaje" rendered="#{blogReaderController.blogReader!=null}"/>
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-3">
+                            <p:outputLabel value="Blog" for="titutlo"/>
+                            <p:inputText id="titutlo" value="#{blogController.blog.title}" type="text"
+                                         required="true"/>
+
+                            <p:outputLabel value="Reader" for="descripcion"/>
+                            <p:inputText id="descripcion" value="#{blogController.blog.description}" type="text"
+                                         required="true"/>
+                        </div>
+
+                    </div>
+                </div>
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>
+
+</body>
+</html>

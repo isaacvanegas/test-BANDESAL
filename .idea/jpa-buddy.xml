@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JpaBuddyIdeaProjectConfig" migrateIndexesAndConstraints="true" reUseTableSchema="true">
+    <option name="defaultUnitInitialized" value="true" />
+    <option name="renamerInitialized" value="true" />
+    <option name="reverseEngineeringLastDbConnectionId" value="f4ac61a9-0421-4916-a360-670b43418960__postgres_blog" />
+    <option name="reLastEntityCreationPackage" value="src/main/java/com/igroup/blog/model" />
+  </component>
+</project>

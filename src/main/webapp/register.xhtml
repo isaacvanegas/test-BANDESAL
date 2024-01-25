@@ -1,0 +1,55 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <h:outputStylesheet name="./css/theme.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <title>Facelets Template</title>
+    </h:head>
+    Registrarse
+</h:head>
+
+<h:body>
+
+    <h:form id="registerForm">
+        <div class="ui">
+            <p:messages id="mensaje" severity="info,fatal"  showDetail="true"   />
+            <div class="ui-g-8 ui-md-6 ui-lg-3">
+                <div class="card">
+                    <div class="grid">
+                        <div class="col-5 flex align-items-center justify-content-center">
+                            <div class="ui-fluid">
+                                <div class="field">
+                                    <p:outputLabel value="Username" for="username" />
+                                    <p:inputText id="username" value="#{usuarioController.usuario.nombre}" type="text" required="true"/>
+                                </div>
+
+                                <div class="field">
+                                    <p:outputLabel value="Password" for="password"/>
+
+                                    <p:password  id="password" value="#{usuarioController.usuario.password}" required="true"
+                                                 validatorMessage="Las claves no coinciden" weakLabel="Débil" strongLabel="Fuerte"
+                                                 goodLabel="Bueno"  match ="password2" feedback="true" promptLabel="Ingrese una clave"/>
+
+                                    <p:outputLabel value="Repetir password" for="password"/>
+                                    <p:password  id="password2"/>
+                                </div>
+
+                                <div class="field">
+                                    <p:commandButton value="Registrar" actionListener="#{usuarioController.registrar()}" update="registerForm , mensaje"/>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:form>
+</h:body>
+</html>
+
