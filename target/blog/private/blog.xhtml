@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<body>
+<p:panelGrid columns="2">
+    <f:facet name="header">
+        <ui:include src="/private/header.xhtml"/>
+    </f:facet>
+
+
+    <p:row>
+
+        <p:column  >
+            <p:menu>
+                <p:submenu label="Options">
+                    <p:menuitem value="Readers" outcome="/reader.xhtml" icon="pi pi-users"/>
+                    <p:menuitem value="Blogs" outcome="/blog.xhtml" icon="pi pi-book"/>
+                    <p:menuitem value="Readers por blog" outcome="/reader_blog.xhtml" icon="pi pi-plus-circle"/>
+                </p:submenu>
+            </p:menu>
+        </p:column>
+
+        <p:column >
+            <ui:define  name="content">
+
+                <p:messages id="mensaje" severity="info,fatal" showDetail="true"/>
+
+                <h:form id="listaReaderForm">
+
+                    <div class="ui-grid">
+                        <div class="ui-g-12 ui-md-6 ui-lg-3">
+                            <p:commandButton value="Agregar blog" icon="pi pi-plus-circle" type="button" actionListener="#{readerController.clean()}"
+                                             onclick="PF('dlg2').show();"/>
+                        </div>
+                    </div>
+
+                    <p:dataTable id="dtBlog"
+                                 style="height: auto !important;"
+                                 var="blog"
+                                 widgetVar="dtBlog"
+                                 value="#{blogController.listBlog}"
+                                 paginatorPosition="top"
+                                 paginator="true"
+                                 emptyMessage="sin registros"
+                                 rows="10"
+                                 lazy="true"
+                                 pageLinks="5"
+                                 dynamic="true"
+                                 reflow="true"
+                                 scrollable="false"
+                                 scrollWidth="100%"
+                                 scrollHeight="100%"
+                                 expandedRow="false"
+                                 styleClass="ui-paginator-current"
+                                 rowKey="#{blog.id}"
+                                 selectionMode="single"
+                                 selection="#{blogController.blog}">
+
+                        <p:ajax event="rowSelect"/>
+
+                        <p:column headerText="Id" width="5%">
+                            <h:outputText value="#{blog.id}"/>
+                        </p:column>
+                        <p:column headerText="Titulo" width="25%">
+                            <h:outputText value="#{blog.title}"/>
+                        </p:column>
+                        <p:column headerText="Descripción" width="25%">
+                            <h:outputText value="#{blog.description}"/>
+                        </p:column>
+
+                    </p:dataTable>
+
+                </h:form>
+
+                <p:dialog header="#{blogController.getAction()} + Blog" id="dlg2"
+                          widgetVar="dlg2" modal="true" width="100%"
+                          position="top">
+
+                    <h:form id="formReader">
+
+                        <div class="ui-g">
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                                    <p:commandButton value="#{blogController.getAction()}" actionListener="#{blogController.registrar()}" update="listaBlogForm , mensaje"/>
+                                    <p:commandButton value="Eliminar" actionListener="#{blogController.eliminar()}" update="listaBlogForm , mensaje" rendered="#{blogController.blog!=null}"/>
+                                </div>
+                                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                                    <p:outputLabel value="Titulo" for="titutlo"/>
+                                    <p:inputText id="titutlo" value="#{blogController.blog.title}" type="text"
+                                                 required="true"/>
+
+                                    <p:outputLabel value="Descripcion" for="descripcion"/>
+                                    <p:inputText id="descripcion" value="#{blogController.blog.description}" type="text"
+                                                 required="true"/>
+                                </div>
+
+                            </div>
+                        </div>
+                    </h:form>
+                </p:dialog>
+
+            </ui:define>
+
+
+
+        </p:column>
+    </p:row>
+
+</p:panelGrid>
+
+
+</body>
+</html>

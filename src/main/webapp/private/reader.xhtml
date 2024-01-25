@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<body>
+
+<ui:composition template="./../WEB-INF/templates/template.xhtml">
+
+    <ui:define name="content">
+
+        <p:messages id="mensaje" severity="info,fatal" showDetail="true"/>
+
+        <h:form id="listaReaderForm">
+
+            <div class="ui-grid">
+                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                    <p:commandButton value="Agregar reader" icon="pi pi-plus-circle" type="button" actionListener="#{readerController.clean()}"
+                                     onclick="PF('dlg2').show();"/>
+                </div>
+            </div>
+
+            <p:dataTable id="dtReader"
+                         style="height: auto !important;"
+                         var="reader"
+                         widgetVar="dtReader"
+                         value="#{readerController.listRreader}"
+                         paginatorPosition="top"
+                         paginator="true"
+                         emptyMessage="sin registros"
+                         rows="10"
+                         lazy="true"
+                         pageLinks="5"
+                         dynamic="true"
+                         reflow="true"
+                         scrollable="false"
+                         scrollWidth="100%"
+                         scrollHeight="100%"
+                         expandedRow="false"
+                         styleClass="ui-paginator-current"
+                         rowKey="#{reader.id}"
+                         selectionMode="single"
+                         selection="#{readerController.reader}">
+
+                <p:ajax event="rowSelect"/>
+
+                <p:column headerText="Id" width="5%">
+                    <h:outputText value="#{reader.id}"/>
+                </p:column>
+                <p:column headerText="Nombre" width="25%">
+                    <h:outputText value="#{reader.name}"/>
+                </p:column>
+
+            </p:dataTable>
+
+        </h:form>
+
+        <p:dialog header="Agregar Reader" id="dlg2"
+                  widgetVar="dlg2" modal="true" width="100%"
+                  position="top">
+
+            <h:form id="formReader">
+
+                <div class="ui-g">
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-6 ui-lg-3">
+                            <p:commandButton value="#{readerController.getAction()}" actionListener="#{readerController.registrar()}" update="listaReaderForm , mensaje"/>
+                            <p:commandButton value="Eliminar" actionListener="#{readerController.eliminar()}" update="listaReaderForm , mensaje" rendered="#{readerController.reader!=null}"/>
+                        </div>
+                        <div class="ui-g-12 ui-md-6 ui-lg-3">
+                            <p:outputLabel value="Nombre" for="nombre"/>
+                            <p:inputText id="nombre" value="#{readerController.reader.name}" type="text"
+                                         required="true"/>
+                        </div>
+
+                    </div>
+                </div>
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>
+
+</body>
+</html>
+
+
