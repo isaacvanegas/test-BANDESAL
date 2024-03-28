@@ -31,5 +31,7 @@ public interface UsuarioFacadeLocal {
 
 
     Usuario inicarSeccion(Usuario prUsuario);
+
+    Usuario registrar(Usuario prUsuario) throws Exception;
     
 }

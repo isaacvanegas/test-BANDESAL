@@ -33,8 +33,6 @@ public class UsuarioController implements Serializable {
   @Inject
   Usuario usuario;
 
-
-
     @PostConstruct
     public void init(){
 
@@ -45,7 +43,7 @@ public class UsuarioController implements Serializable {
        Seguridad seguridad= new Seguridad();
         try{
             usuario.setPassword(seguridad.encode(usuario.getPassword(),getEncryptionMethod()));
-            usuarioEJB.create(usuario);
+            usuarioEJB.registrar(usuario);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Detalle","Registro Exitoso"));
             clean();
         }catch(Exception e){

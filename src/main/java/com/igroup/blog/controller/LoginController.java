@@ -13,7 +13,7 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 
-@Named
+@Named("loginController")
 @ViewScoped
 public class LoginController implements Serializable {
 
@@ -23,30 +23,30 @@ public class LoginController implements Serializable {
     private Usuario usuario;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         clean();
     }
 
-    public String iniciarSeccion(){
+    public String iniciarSeccion() {
         String redirect = null;
-        try{
+        try {
             Usuario usuarioActual = usuarioEJB.inicarSeccion(usuario);
-            if(usuarioActual !=null){
+            if (usuarioActual != null) {
                 HttpServletRequest oRequest = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
                 oRequest.getSession().setAttribute("usuarioActual", usuarioActual);
                 redirect = "/private/reader.xhtml";
-            }else{
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,"Detalle","Credenciales incorrectas"));
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Detalle", "Credenciales incorrectas"));
             }
 
-        }catch (Exception e){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,"Detalle","Error al iniciar seccion"));
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Detalle", "Error al iniciar seccion"));
         }
         return redirect;
     }
 
-    private void clean(){
-        usuario= new Usuario();
+    private void clean() {
+        usuario = new Usuario();
     }
 
     public Usuario getUsuario() {
@@ -56,23 +56,23 @@ public class LoginController implements Serializable {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-    
-    public void verificarSeccion(){
-        Usuario u ;
-         FacesContext f =  FacesContext.getCurrentInstance();
-        try{
+
+    public void verificarSeccion() {
+        Usuario u;
+        FacesContext f = FacesContext.getCurrentInstance();
+        try {
             HttpServletRequest oRequest = (HttpServletRequest) f.getExternalContext().getRequest();
-        u = (Usuario) oRequest.getSession().getAttribute("usuarioActual");
-        if(u==null){
-            f.getExternalContext().redirect("./../index.xhtml");
-        }
-        
-        }catch(Exception e){
+            u = (Usuario) oRequest.getSession().getAttribute("usuarioActual");
+            if (u == null) {
+                f.getExternalContext().redirect("./../index.xhtml");
+            }
+
+        } catch (Exception e) {
             //Todo: log
         }
     }
 
-    public void cerrarSeccion(){
+    public void cerrarSeccion() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
     }
 }

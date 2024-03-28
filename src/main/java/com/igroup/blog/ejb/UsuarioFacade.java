@@ -35,32 +35,43 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         return em;
     }
 
+    @Inject
+    Seguridad seguridad;
+
     public UsuarioFacade() {
         super(Usuario.class);
     }
 
     @Override
-    public Usuario inicarSeccion(Usuario prUsuario){
-        Usuario usuario = null;
+    public Usuario registrar(Usuario prUsuario) throws Exception {
         String consulta;
-        Seguridad seguridad = new Seguridad();
 
-        try{
+            consulta= ("From Usuario u where u.nombre = :nombre ");
+
+            Query query = em.createQuery(consulta);
+            query.setParameter("nombre",prUsuario.getNombre());
+            Usuario usuario = (Usuario) query.getSingleResult();
+
+            if(usuario!=null){
+               throw  new Exception("El usuario ya existe") ;
+            }else{
+                em.persist(prUsuario);
+            }
+
+        return prUsuario;
+    }
+
+    @Override
+    public Usuario inicarSeccion(Usuario prUsuario){
+        String consulta;
+
            consulta= ("From Usuario u where u.nombre = :nombre ");
 
             Query query = em.createQuery(consulta);
             query.setParameter("nombre",prUsuario.getNombre());
-            List<Usuario> list =query.getResultList();
+            Usuario usuario = (Usuario) query.getSingleResult();
 
-            usuario = list.isEmpty() ? usuario :
-                    seguridad.checkpw(prUsuario.getPassword(), list.get(0).getPassword(),getEncryptionMethod())
-                            ? list.get(0) : usuario;
-
-            return list.isEmpty() ? usuario : list.get(0);
-        }catch (Exception e){
-            throw e;
-        }
-
+            return verificarUsuario(usuario,prUsuario);
     }
 
     public EncryptionMethod getEncryptionMethod(){
@@ -82,10 +93,15 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         return encryptionMethod;
     }
 
-
     private EncryptionMethod getEnumValueEncryptionMethod(String property) {
         return EncryptionMethod.valueOf(property.trim());
     }
 
+    private Usuario verificarUsuario(Usuario usuario, Usuario usuarioActual){
+        if (usuario != null && seguridad.checkpw(usuarioActual.getPassword(), usuario.getPassword(),getEncryptionMethod())){
+            usuario = usuarioActual;
+        }
+     return  usuario;
+    }
 
 }
